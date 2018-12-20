@@ -1,0 +1,19 @@
+{
+  "name": "shuchkin/simplecsv",
+  "description": "Parse and retrieve data from CSV files. Export data to CSV.",
+  "keywords": ["php", "excel", "csv", "parser", "backend"],
+  "homepage": "https://github.com/shuchkin/simplecsv",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergey Shuchkin (SMSPILOT)",
+      "email": "sergey.shuchkin@gmail.com",
+      "homepage": "http://www.shuchkin.ru/"
+    }
+  ],
+  "autoload": {
+    "classmap": [
+      "src/SimpleCSV.php"
+    ]
+  }
+}
