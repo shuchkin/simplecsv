@@ -1,4 +1,5 @@
 # SimpleCSV class 0.1
+[<img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fshuchkin" />](https://www.patreon.com/shuchkin)
 
 Parse and retrieve data from CSV files. Save array to CSV file.
 See XLSX reader [here](https://github.com/shuchkin/simplexlsx), XLS reader [here](https://github.com/shuchkin/simplexls),      
