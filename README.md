@@ -71,7 +71,5 @@ ISBN,title,author
 ```
 	
 ## History
-```
-0.1.1 (2021-04-28) fix 7.4 deprication [error](https://github.com/shuchkin/simplecsv/issues/1)
+0.1.1 (2021-04-28) fix 7.4 deprication [error](https://github.com/shuchkin/simplecsv/issues/1)<br/>
 0.1 (2018-12-20) GitHub realese, composer
-```
