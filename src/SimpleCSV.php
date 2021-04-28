@@ -94,13 +94,13 @@ class SimpleCSV {
 		$r = array();
 		$cnt = strlen($this->_csv); 
 		
-		$esc = $escesc = false; 
+		$esc = false;
 		$i = $k = $n = 0;
 		$r[$k][$n] = '';
 		
 		while ($i < $cnt) { 
-			$ch = $this->_csv{$i};
-			$chch = ($i < $cnt-1) ? $ch.$this->_csv{$i+1} : $ch;
+			$ch = $this->_csv[$i];
+			$chch = ($i < $cnt-1) ? $ch.$this->_csv[$i+1] : $ch;
 
 			if ($ch === $CSV_LINEBREAK) {
 				if ($esc) {
@@ -108,7 +108,7 @@ class SimpleCSV {
 				} else {
 					$k++;
 					$n = 0;
-					$esc = $escesc = false;
+					$esc = false;
 					$r[$k][$n] = '';
 				}
 			} else if ($chch === $CSV_LINEBREAK) {
@@ -117,7 +117,7 @@ class SimpleCSV {
 				} else {
 					$k++;
 					$n = 0;
-					$esc = $escesc = false;
+					$esc = false;
 					$r[$k][$n] = '';
 				}
 				$i++;
@@ -127,7 +127,7 @@ class SimpleCSV {
 				} else { 
 					$n++;
 					$r[$k][$n] = '';
-					$esc = $escesc = false; 
+					$esc = false;
 				}
 			} else if ( $chch === $CSV_ENCLOSURE.$CSV_ENCLOSURE && $esc ) {
 				$r[$k][$n] .= $CSV_ENCLOSURE;

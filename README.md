@@ -1,4 +1,4 @@
-# SimpleCSV class 0.1
+# SimpleCSV class 0.1.1
 [<img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fshuchkin" />](https://www.patreon.com/shuchkin)
 
 Parse and retrieve data from CSV files. Save array to CSV file.
@@ -72,5 +72,6 @@ ISBN,title,author
 	
 ## History
 ```
+0.1.1 (2021-04-28) fix 7.4 deprication [error](https://github.com/shuchkin/simplecsv/issues/1)
 0.1 (2018-12-20) GitHub realese, composer
 ```
