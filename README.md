@@ -41,11 +41,9 @@ The recommended way to install this library is [through Composer](https://getcom
 
 This will install the latest supported version:
 ```bash
-$ composer require shuchkin/simplecsv
+composer require shuchkin/simplecsv
 ```
 or download class [here](https://github.com/shuchkin/simplecsv/blob/master/src/SimpleCSV.php)
-
-```
 
 ### Debug
 ```php
@@ -71,5 +69,5 @@ ISBN,title,author
 ```
 	
 ## History
-0.1.1 (2021-04-28) fix 7.4 deprication [error](https://github.com/shuchkin/simplecsv/issues/1)<br/>
-0.1 (2018-12-20) GitHub realese, composer
+0.1.1 (2021-04-28) fix 7.4 deprecation [error](https://github.com/shuchkin/simplecsv/issues/1)<br/>
+0.1 (2018-12-20) GitHub release, composer
