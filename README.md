@@ -1,15 +1,18 @@
-# SimpleCSV class 0.1.1
-[<img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.herokuapp.com%2Fshuchkin" />](https://www.patreon.com/shuchkin)
+# SimpleCSV class 0.2
+[<img src="https://img.shields.io/packagist/dt/shuchkin/simplecsv" />](https://packagist.org/packages/shuchkin/simplecsv)
+[<img src="https://img.shields.io/github/license/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/blob/master/license.md) [<img src="https://img.shields.io/github/stars/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/stargazers) [<img src="https://img.shields.io/github/forks/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/network) [<img src="https://img.shields.io/github/issues/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/issues)
+[<img src="https://img.shields.io/opencollective/all/simplexlsx" />](https://opencollective.com/simplexlsx)
+[<img src="https://img.shields.io/badge/patreon-_-_" />](https://www.patreon.com/shuchkin)
 
 Parse and retrieve data from CSV files. Save array to CSV file.
 See XLSX reader [here](https://github.com/shuchkin/simplexlsx), XLS reader [here](https://github.com/shuchkin/simplexls),      
 
-**Sergey Shuchkin** <sergey.shuchkin@gmail.com> 2015-2019<br/>
+**Sergey Shuchkin** <sergey.shuchkin@gmail.com> 2015-2023<br/>
 
 ## Basic Usage
 ```php
-if ( $csv = SimpleCSV::import('book.csv') ) {
-	print_r( $csv );
+if ( $csv = SimpleCSV::parse('book.csv') ) {
+	print_r( $csv->rows() );
 }
 ```
 ```
@@ -45,22 +48,19 @@ $ composer require shuchkin/simplecsv
 ```
 or download class [here](https://github.com/shuchkin/simplecsv/blob/master/src/SimpleCSV.php)
 
-```
-
 ### Debug
 ```php
 ini_set('error_reporting', E_ALL );
 ini_set('display_errors', 1 );
 
 $csv = SimpleCSV::import('books.csv');
-print_r( $csv );
-
+print_r( $csv->rows() );
 ```
 ### Export
 ```php
-$items = array(
-	array('ISBN', 'title', 'author'),
-	array('618260307','The Hobbit','J. R. R. Tolkien')
+$items = [
+	['ISBN', 'title', 'author'],
+	['618260307','The Hobbit','J. R. R. Tolkien']
 );
 $csv = SimpleCSV::export( $items );
 echo '<pre>' . $csv . '</pre>';
@@ -71,5 +71,9 @@ ISBN,title,author
 ```
 	
 ## History
+0.2 (2023-07-27)
+* fix 8x deprication [Passing null to parametr](https://github.com/shuchkin/simplecsv/issues/5)
+* added static methods SimpleCSV::parse, SimpleCSV::parseFile, SimpleCSV::parseData
+  
 0.1.1 (2021-04-28) fix 7.4 deprication [error](https://github.com/shuchkin/simplecsv/issues/1)<br/>
 0.1 (2018-12-20) GitHub realese, composer

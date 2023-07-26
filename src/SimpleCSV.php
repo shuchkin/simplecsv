@@ -1,17 +1,29 @@
 <?php
 
 class SimpleCSV {
-	private $_delimiter;
-	private $_enclosure;
-	private $_linebreak;
-	private $_csv = '';
+
+	protected $_delimiter;
+	protected $_enclosure;
+	protected $_linebreak;
+	protected $_csv = '';
+
+    public static function parse( $filename_or_data, $is_data, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
+        $csv = new static($delimiter, $enclosure, $linebreak);
+        $csv->_csv = $is_data ? $filename_or_data : file_get_contents($filename_or_data);
+        return $csv;
+    }
+    public static function parseFile( $filename, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
+        return static::parse($filename, false, $delimiter, $enclosure, $linebreak);
+    }
+    public static function parseData( $csv_content, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
+        return static::parse($csv_content, true, $delimiter, $enclosure, $linebreak);
+    }
+
 	public static function import( $filename_or_data, $is_data = false, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
-		$csv = new static( $delimiter, $enclosure, $linebreak );
-		return $csv->toArray( $filename_or_data, $is_data );
+        return (new static($delimiter, $enclosure, $linebreak))->toArray( $filename_or_data, $is_data );
 	}
 	public static function export( $items, $delimiter = ',', $enclosure = '"', $linebreak = "\r\n") {
-		$csv = new static( $delimiter, $enclosure, $linebreak );
-		return $csv->fromArray( $items );
+        return (new static($delimiter, $enclosure, $linebreak))->fromArray( $items );
 	}
 	public function __construct( $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
 		$this->_delimiter = $delimiter;
@@ -34,8 +46,7 @@ class SimpleCSV {
 				$this->_delimiter = ',';
 			} else if (strpos($this->_csv, "\t") !== false) {
 				$this->_delimiter = "\t";
-			}
-			else if ( strpos($this->_csv, ';' ) !== false) {
+			} else if ( strpos($this->_csv, ';' ) !== false) {
 				$this->_delimiter = ';';
 			}
 			else {
@@ -82,9 +93,14 @@ class SimpleCSV {
 		}
 		return $this->_linebreak;
 	}
-	public function toArray( $filename, $is_csv_content = false ) {
-		
-		$this->_csv = $is_csv_content ? $filename : file_get_contents( $filename );
+    public function rows() {
+        return $this->toArray();
+    }
+	public function toArray( $filename = null, $is_csv_content = false ) {
+
+        if ($filename) {
+            $this->_csv = $is_csv_content ? $filename : file_get_contents($filename);
+        }
 
 		$CSV_LINEBREAK = $this->linebreak();
 		$CSV_ENCLOSURE = $this->enclosure();
@@ -158,17 +174,18 @@ class SimpleCSV {
 		foreach( $items as $i) {
 			$line = '';
 			
-			foreach ($i as $v) { 
-				if (strpos($v, $CSV_ENCLOSURE) !== false) { 
-					$v = str_replace($CSV_ENCLOSURE, $CSV_ENCLOSURE . $CSV_ENCLOSURE, $v); 
-				} 
-			
-				if ((strpos($v, $CSV_DELIMITER) !== false) 
-					|| (strpos($v, $CSV_ENCLOSURE) !== false) 
-					|| (strpos($v, $CSV_LINEBREAK) !== false))
-				{
-					$v = $CSV_ENCLOSURE . $v . $CSV_ENCLOSURE; 
-				}
+			foreach ($i as $v) {
+                if (is_string($v) && $v !== '') {
+                    if (strpos($v, $CSV_ENCLOSURE) !== false) {
+                        $v = str_replace($CSV_ENCLOSURE, $CSV_ENCLOSURE . $CSV_ENCLOSURE, $v);
+                    }
+
+                    if ((strpos($v, $CSV_DELIMITER) !== false)
+                        || (strpos($v, $CSV_ENCLOSURE) !== false)
+                        || (strpos($v, $CSV_LINEBREAK) !== false)) {
+                        $v = $CSV_ENCLOSURE . $v . $CSV_ENCLOSURE;
+                    }
+                }
 				$line .= $line ? $CSV_DELIMITER . $v : $v;
 			}
 			$result .= $result ? $CSV_LINEBREAK . $line : $line;
