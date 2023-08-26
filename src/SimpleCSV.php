@@ -1,180 +1,193 @@
 <?php
 
-class SimpleCSV {
+namespace Shuchkin;
 
-	protected $_delimiter;
-	protected $_enclosure;
-	protected $_linebreak;
-	protected $_csv = '';
+class SimpleCSV
+{
 
-    public static function parse( $filename_or_data, $is_data, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
+    protected $_delimiter;
+    protected $_enclosure;
+    protected $_linebreak;
+    protected $_csv = '';
+
+    public static function parse($filename_or_data, $is_data, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto')
+    {
         $csv = new static($delimiter, $enclosure, $linebreak);
         $csv->_csv = $is_data ? $filename_or_data : file_get_contents($filename_or_data);
         return $csv;
     }
-    public static function parseFile( $filename, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
+    public static function parseFile($filename, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto')
+    {
         return static::parse($filename, false, $delimiter, $enclosure, $linebreak);
     }
-    public static function parseData( $csv_content, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
+    public static function parseData($csv_content, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto')
+    {
         return static::parse($csv_content, true, $delimiter, $enclosure, $linebreak);
     }
 
-	public static function import( $filename_or_data, $is_data = false, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
-        return (new static($delimiter, $enclosure, $linebreak))->toArray( $filename_or_data, $is_data );
-	}
-	public static function export( $items, $delimiter = ',', $enclosure = '"', $linebreak = "\r\n") {
-        return (new static($delimiter, $enclosure, $linebreak))->fromArray( $items );
-	}
-	public function __construct( $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto' ) {
-		$this->_delimiter = $delimiter;
-		$this->_enclosure = $enclosure;
-		$this->_linebreak = $linebreak;
-	}
-	public function delimiter( $set = false ) {
-		if ($set !== false) {
-			return $this->_delimiter = $set;
-		}
-		if ($this->_delimiter === 'auto') {
-			// detect delimiter
-			if ( strpos($this->_csv, $this->_enclosure . ',' ) !== false ) {
-				$this->_delimiter = ',';
-			} else if (strpos($this->_csv, $this->_enclosure."\t") !== false ) {
-				$this->_delimiter = "\t";
-			} else if ( strpos($this->_csv, $this->_enclosure . ';' ) !== false ) {
-				$this->_delimiter = ';';
-			} else if ( strpos($this->_csv, ',' ) !== false ) {
-				$this->_delimiter = ',';
-			} else if (strpos($this->_csv, "\t") !== false) {
-				$this->_delimiter = "\t";
-			} else if ( strpos($this->_csv, ';' ) !== false) {
-				$this->_delimiter = ';';
-			}
-			else {
-				$this->_delimiter = ',';
-			}
-		}
-		return $this->_delimiter;
-	}
-	public function enclosure( $set = false ) {
-		if ($set !== false) {
-			return $this->_enclosure = $set;
-		}
-		if ($this->_enclosure === 'auto') {
-			// detect quot
-			if (strpos($this->_csv, '"') !== false) {
-				$this->_enclosure = '"';
-			}
-			else if (strpos($this->_csv, "'") !== false) {
-				$this->_enclosure = "'";
-			}
-			else {
-				$this->_enclosure = '"';
-			}
-		}
-		return $this->_enclosure;
-	}
-	public function linebreak( $set = false ) {
-		if ($set !== false) {
-			return $this->_linebreak = $set;
-		}
-		if ($this->_linebreak === 'auto') {
-			if (strpos($this->_csv,"\r\n") !== false) {
-				$this->_linebreak = "\r\n";
-			}
-			else if (strpos($this->_csv,"\n") !== false) {
-				$this->_linebreak = "\n";
-			}
-			else if (strpos($this->_csv,"\r") !== false) {
-				$this->_linebreak = "\r";
-			}
-			else {
-				$this->_linebreak = "\r\n";
-			}
-		}
-		return $this->_linebreak;
-	}
-    public function rows() {
+    public static function import($filename_or_data, $is_data = false, $delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto')
+    {
+        return (new static($delimiter, $enclosure, $linebreak))->toArray($filename_or_data, $is_data);
+    }
+    public static function export($items, $delimiter = ',', $enclosure = '"', $linebreak = "\r\n")
+    {
+        return (new static($delimiter, $enclosure, $linebreak))->fromArray($items);
+    }
+    public function __construct($delimiter = 'auto', $enclosure = 'auto', $linebreak = 'auto')
+    {
+        $this->_delimiter = $delimiter;
+        $this->_enclosure = $enclosure;
+        $this->_linebreak = $linebreak;
+    }
+    public function delimiter($set = false)
+    {
+        if ($set !== false) {
+            return $this->_delimiter = $set;
+        }
+        if ($this->_delimiter === 'auto') {
+            // detect delimiter
+            if (($p = strpos($this->_csv, $this->_enclosure . ',')) > 0
+                && ($this->_csv[$p-1] !== $this->_enclosure)
+            ) {
+                $this->_delimiter = ',';
+            } elseif (($p = strpos($this->_csv, $this->_enclosure."\t")) > 0
+                && ($this->_csv[$p-1] !== $this->_enclosure)
+            ) {
+                $this->_delimiter = "\t";
+            } elseif (($p = strpos($this->_csv, $this->_enclosure . ';')) > 0
+                && ($this->_csv[$p-1] !== $this->_enclosure)
+            ) {
+                $this->_delimiter = ';';
+            } elseif (strpos($this->_csv, ',') !== false) {
+                $this->_delimiter = ',';
+            } elseif (strpos($this->_csv, "\t") !== false) {
+                $this->_delimiter = "\t";
+            } elseif (strpos($this->_csv, ';') !== false) {
+                $this->_delimiter = ';';
+            } else {
+                $this->_delimiter = ',';
+            }
+        }
+        return $this->_delimiter;
+    }
+    public function enclosure($set = false)
+    {
+        if ($set !== false) {
+            return $this->_enclosure = $set;
+        }
+        if ($this->_enclosure === 'auto') {
+            // detect quot
+            if (strpos($this->_csv, '"') !== false) {
+                $this->_enclosure = '"';
+            } else if (strpos($this->_csv, "'") !== false) {
+                $this->_enclosure = "'";
+            } else {
+                $this->_enclosure = '"';
+            }
+        }
+        return $this->_enclosure;
+    }
+    public function linebreak($set = false)
+    {
+        if ($set !== false) {
+            return $this->_linebreak = $set;
+        }
+        if ($this->_linebreak === 'auto') {
+            if (strpos($this->_csv, "\r\n") !== false) {
+                $this->_linebreak = "\r\n";
+            } else if (strpos($this->_csv, "\n") !== false) {
+                $this->_linebreak = "\n";
+            } else if (strpos($this->_csv, "\r") !== false) {
+                $this->_linebreak = "\r";
+            } else {
+                $this->_linebreak = "\r\n";
+            }
+        }
+        return $this->_linebreak;
+    }
+    public function rows()
+    {
         return $this->toArray();
     }
-	public function toArray( $filename = null, $is_csv_content = false ) {
+    public function toArray($filename = null, $is_csv_content = false)
+    {
 
         if ($filename) {
             $this->_csv = $is_csv_content ? $filename : file_get_contents($filename);
         }
 
-		$CSV_LINEBREAK = $this->linebreak();
-		$CSV_ENCLOSURE = $this->enclosure();
-		$CSV_DELIMITER = $this->delimiter();
+        $CSV_LINEBREAK = $this->linebreak();
+        $CSV_ENCLOSURE = $this->enclosure();
+        $CSV_DELIMITER = $this->delimiter();
 
 
-		$r = array();
-		$cnt = strlen($this->_csv); 
-		
-		$esc = false;
-		$i = $k = $n = 0;
-		$r[$k][$n] = '';
-		
-		while ($i < $cnt) { 
-			$ch = $this->_csv[$i];
-			$chch = ($i < $cnt-1) ? $ch.$this->_csv[$i+1] : $ch;
+        $r = array();
+        $cnt = strlen($this->_csv);
+        
+        $esc = false;
+        $i = $k = $n = 0;
+        $r[$k][$n] = '';
+        
+        while ($i < $cnt) {
+            $ch = $this->_csv[$i];
+            $chch = ($i < $cnt-1) ? $ch.$this->_csv[$i+1] : $ch;
 
-			if ($ch === $CSV_LINEBREAK) {
-				if ($esc) {
-					$r[$k][$n] .= $ch; 
-				} else {
-					$k++;
-					$n = 0;
-					$esc = false;
-					$r[$k][$n] = '';
-				}
-			} else if ($chch === $CSV_LINEBREAK) {
-				if ($esc) {
-					$r[$k][$n] .= $chch;
-				} else {
-					$k++;
-					$n = 0;
-					$esc = false;
-					$r[$k][$n] = '';
-				}
-				$i++;
-			} else if ($ch === $CSV_DELIMITER) { 
-				if ($esc) { 
-					$r[$k][$n] .= $ch; 
-				} else { 
-					$n++;
-					$r[$k][$n] = '';
-					$esc = false;
-				}
-			} else if ( $chch === $CSV_ENCLOSURE.$CSV_ENCLOSURE && $esc ) {
-				$r[$k][$n] .= $CSV_ENCLOSURE;
-				$i++;
-			} elseif ($ch === $CSV_ENCLOSURE) {
-				
-				$esc = !$esc;
-				
-			} else {
-				$r[$k][$n] .= $ch;
-			}
-			$i++; 
-		}
-		return $r;
-	}
-	public function fromArray( $items ) {
-		
-		if (!is_array($items)) {
-			trigger_error('CSV::export array required', E_USER_WARNING);
-			return false;
-		}
-		
-		$CSV_DELIMITER = $this->delimiter();
-		$CSV_ENCLOSURE = $this->enclosure();
-		$CSV_LINEBREAK = $this->linebreak();
-		
-		$result = '';
-		foreach( $items as $i) {
-			$line = '';
-			
-			foreach ($i as $v) {
+            if ($ch === $CSV_LINEBREAK) {
+                if ($esc) {
+                    $r[$k][$n] .= $ch;
+                } else {
+                    $k++;
+                    $n = 0;
+                    $esc = false;
+                    $r[$k][$n] = '';
+                }
+            } else if ($chch === $CSV_LINEBREAK) {
+                if ($esc) {
+                    $r[$k][$n] .= $chch;
+                } else {
+                    $k++;
+                    $n = 0;
+                    $esc = false;
+                    $r[$k][$n] = '';
+                }
+                $i++;
+            } else if ($ch === $CSV_DELIMITER) {
+                if ($esc) {
+                    $r[$k][$n] .= $ch;
+                } else {
+                    $n++;
+                    $r[$k][$n] = '';
+                    $esc = false;
+                }
+            } else if ($chch === $CSV_ENCLOSURE.$CSV_ENCLOSURE && $esc) {
+                $r[$k][$n] .= $CSV_ENCLOSURE;
+                $i++;
+            } elseif ($ch === $CSV_ENCLOSURE) {
+                $esc = !$esc;
+            } else {
+                $r[$k][$n] .= $ch;
+            }
+            $i++;
+        }
+        return $r;
+    }
+    public function fromArray($items)
+    {
+        
+        if (!is_array($items)) {
+            trigger_error('CSV::export array required', E_USER_WARNING);
+            return false;
+        }
+        
+        $CSV_DELIMITER = $this->delimiter();
+        $CSV_ENCLOSURE = $this->enclosure();
+        $CSV_LINEBREAK = $this->linebreak();
+        
+        $result = '';
+        foreach ($items as $i) {
+            $line = '';
+            
+            foreach ($i as $v) {
                 if (is_string($v) && $v !== '') {
                     if (strpos($v, $CSV_ENCLOSURE) !== false) {
                         $v = str_replace($CSV_ENCLOSURE, $CSV_ENCLOSURE . $CSV_ENCLOSURE, $v);
@@ -186,11 +199,11 @@ class SimpleCSV {
                         $v = $CSV_ENCLOSURE . $v . $CSV_ENCLOSURE;
                     }
                 }
-				$line .= $line ? $CSV_DELIMITER . $v : $v;
-			}
-			$result .= $result ? $CSV_LINEBREAK . $line : $line;
-		}
-		
-		return $result;
-	}
+                $line .= $line ? $CSV_DELIMITER . $v : $v;
+            }
+            $result .= $result ? $CSV_LINEBREAK . $line : $line;
+        }
+        
+        return $result;
+    }
 }

@@ -1,4 +1,4 @@
-# SimpleCSV class 0.2
+# SimpleCSV class 1.0
 [<img src="https://img.shields.io/packagist/dt/shuchkin/simplecsv" />](https://packagist.org/packages/shuchkin/simplecsv)
 [<img src="https://img.shields.io/github/license/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/blob/master/license.md) [<img src="https://img.shields.io/github/stars/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/stargazers) [<img src="https://img.shields.io/github/forks/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/network) [<img src="https://img.shields.io/github/issues/shuchkin/simplecsv" />](https://github.com/shuchkin/simplecsv/issues)
 [<img src="https://img.shields.io/opencollective/all/simplexlsx" />](https://opencollective.com/simplexlsx)
@@ -11,7 +11,7 @@ See XLSX reader [here](https://github.com/shuchkin/simplexlsx), XLS reader [here
 
 ## Basic Usage
 ```php
-if ( $csv = SimpleCSV::parse('book.csv') ) {
+if ( $csv = Shuchkin\SimpleCSV::parse('book.csv') ) {
 	print_r( $csv->rows() );
 }
 ```
@@ -53,7 +53,7 @@ or download class [here](https://github.com/shuchkin/simplecsv/blob/master/src/S
 ini_set('error_reporting', E_ALL );
 ini_set('display_errors', 1 );
 
-$csv = SimpleCSV::import('books.csv');
+$csv = Shuchkin\SimpleCSV::import('books.csv');
 print_r( $csv->rows() );
 ```
 ### Export
@@ -62,7 +62,7 @@ $items = [
 	['ISBN', 'title', 'author'],
 	['618260307','The Hobbit','J. R. R. Tolkien']
 );
-$csv = SimpleCSV::export( $items );
+$csv = Shuchkin\SimpleCSV::export( $items );
 echo '<pre>' . $csv . '</pre>';
 /*
 ISBN,title,author
@@ -71,6 +71,10 @@ ISBN,title,author
 ```
 	
 ## History
+1.0 (2023-08-27)
+* used namespace now: Shuchkin\SimpleCSV
+* fixed delimiter detection
+
 0.2 (2023-07-27)
 * fix 8x deprication [Passing null to parametr](https://github.com/shuchkin/simplecsv/issues/5)
 * added static methods SimpleCSV::parse, SimpleCSV::parseFile, SimpleCSV::parseData
