@@ -61,7 +61,7 @@ print_r( $csv->rows() );
 $items = [
 	['ISBN', 'title', 'author'],
 	['618260307','The Hobbit','J. R. R. Tolkien']
-);
+];
 $csv = Shuchkin\SimpleCSV::export( $items );
 echo '<pre>' . $csv . '</pre>';
 /*
